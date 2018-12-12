@@ -1,0 +1,23 @@
+{
+  "name": "jwt-demo",
+  "version": "0.0.1",
+  "description": "A command-line parser for JSON web tokens",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "keywords": [
+    "jwt",
+    "commandline",
+    "parser"
+  ],
+  "author": "Chase Franks",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.19.0",
+    "jsonwebtoken": "^8.4.0"
+  },
+  "bin": {
+    "jwt-cli": "./cli.mjs"
+  }
+}
