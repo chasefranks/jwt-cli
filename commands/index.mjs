@@ -18,7 +18,7 @@ export const sign = ( payload, secret ) => {
     // parse and cleanse the input
     let payloadObj = JSON.parse(payload);
     let signedToken = jwt.sign(payloadObj, secret, { header: { typ: 'JWT' } });
-    process.stdout.write(json(signedToken));
+    process.stdout.write(signedToken + '\n');
 }
 
 export const patch = ( token, path, secret ) => {
@@ -26,5 +26,5 @@ export const patch = ( token, path, secret ) => {
 }
 
 const json = (obj) => {
-    return JSON.stringify(obj, null, 4);
+    return JSON.stringify(obj, null, 4) + '\n';
 }
