@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import jp from 'jsonpath';
 
 export const parse = (token) => {
     let decoded = jwt.decode(token, { complete: true });
@@ -22,7 +23,33 @@ export const sign = ( payload, secret ) => {
 }
 
 export const patch = ( token, path, secret ) => {
-    console.log(`${ JSON.stringify({ token, path, secret }) }`);
+
+    // path will be list of pairs like jsonPath=newValue separated by commas
+    let pairs = path.split(',');
+
+    let decoded = jwt.decode(token, { complete: true });
+    let { payload } = decoded;
+
+    // set new claims
+    pairs.forEach((pair) => {
+        let jpath = pair.split('=')[0].trim();
+        let val = pair.split('=')[1].trim();
+
+        jp.apply(payload, jpath, (value) => {
+            // determine type of value here
+            if (Number.isInteger(value)) {
+                return parseInt(val);
+            } else {
+                return val;
+            }
+        })
+    });
+
+    // sign with secret
+    let signedToken = jwt.sign(payload, secret, { header: { typ: 'JWT' } });
+
+    process.stdout.write(signedToken + '\n');
+
 }
 
 const json = (obj) => {

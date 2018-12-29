@@ -7,8 +7,8 @@
     "test": "mocha --recursive"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/chasefranks/jwt-cli.git"
+    "type": "git",
+    "url": "https://github.com/chasefranks/jwt-cli.git"
   },
   "keywords": [
     "jwt",
@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.19.0",
+    "jsonpath": "^1.0.0",
     "jsonwebtoken": "^8.4.0"
   },
   "bin": {
