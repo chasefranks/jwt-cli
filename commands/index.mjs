@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import jp from 'jsonpath';
+import util from 'util';
+
+import '../expiredDates';
 
 export const parse = (token) => {
     let decoded = jwt.decode(token, { complete: true });
@@ -53,5 +56,17 @@ export const patch = ( token, path, secret ) => {
 }
 
 const json = (obj) => {
-    return JSON.stringify(obj, null, 4) + '\n';
+
+    // convert exp to date so it can be rendered by our
+    // custom util inspect function
+    if (obj.payload && obj.payload.exp) {
+        let time = obj.payload.exp * 1000;
+        obj.payload.exp = new Date(time);
+    }
+
+    return util.inspect(obj, {
+        compact: false,
+        colors: true
+    }) + '\n';
+
 }
