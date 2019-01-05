@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chasefranks/jwt-cli.git"
+    "url": "https://github.com/chasefranks/jwt-tools.git"
   },
   "keywords": [
     "jwt",

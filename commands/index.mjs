@@ -55,11 +55,35 @@ export const patch = ( token, path, secret ) => {
 
 }
 
+export const refresh = (token, secret) => {
+
+    let decoded = jwt.decode(token, { complete:true });
+
+    let { header, payload } = decoded;
+
+    let now = new Date();
+
+    // get lifetime of token in seconds if available (if exp is present)
+    if (payload.exp) {
+        let lifetime = payload.exp - payload.iat;
+
+        payload.iat = Math.floor(now.getTime() / 1000);
+        payload.exp = payload.iat + lifetime;
+    } else {
+        payload.iat = Math.floor(now.getTime() / 1000);
+    }
+
+    // sign and return
+    let refreshedToken = jwt.sign(payload, secret, { header });
+    process.stdout.write(refreshedToken + '\n');
+
+}
+
 const inspect = (obj) => {
 
     // convert exp to date so it can be rendered by our
     // custom util inspect function
-    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES) {
+    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES /* TODO: release */) {
         let time = obj.payload.exp * 1000;
         obj.payload.exp = new Date(time);
     }
