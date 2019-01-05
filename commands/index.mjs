@@ -1,15 +1,18 @@
 import jwt from 'jsonwebtoken';
 import jp from 'jsonpath';
+import util from 'util';
+
+import '../expiredDates';
 
 export const parse = (token) => {
     let decoded = jwt.decode(token, { complete: true });
-    process.stdout.write(json(decoded));
+    process.stdout.write(inspect(decoded));
 }
 
 export const verify = ( token, secret ) => {
     try {
         let verified = jwt.verify(token, secret);
-        process.stdout.write(json(verified))
+        process.stdout.write(inspect(verified))
     } catch(error) {
         process.stdout.write(`token not valid!\n${error.message}\n`);
     }
@@ -52,6 +55,18 @@ export const patch = ( token, path, secret ) => {
 
 }
 
-const json = (obj) => {
-    return JSON.stringify(obj, null, 4) + '\n';
+const inspect = (obj) => {
+
+    // convert exp to date so it can be rendered by our
+    // custom util inspect function
+    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES) {
+        let time = obj.payload.exp * 1000;
+        obj.payload.exp = new Date(time);
+    }
+
+    return util.inspect(obj, {
+        compact: false,
+        colors: true
+    }) + '\n';
+
 }
