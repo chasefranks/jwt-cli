@@ -55,6 +55,10 @@ export const patch = ( token, path, secret ) => {
 
 }
 
+export const refresh = (token, secret) => {
+    console.log(`refreshing token ${token} with secret ${secret}`);
+}
+
 const inspect = (obj) => {
 
     // convert exp to date so it can be rendered by our

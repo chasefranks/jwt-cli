@@ -97,8 +97,18 @@ Output:
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJNciBCaWdnbGVzd29ydGgiLCJpYXQiOjE1NDQ4ODk3MzYsImV4cCI6MTU0NDkwNDEzNn0.cD6gaA7mOwwB_1spZWhZsVwyzXuOO6Rj3uQYwnqX70M
 ```
 
+A shortcut command to perform refreshing a token is [refresh](#refresh).
+
 Note the syntax `$.exp` to target the `exp` field of the JWT's payload. In general, the -p option accepts any [JSON path](http://goessner.net/articles/JsonPath/) expression to reference one or more fields in the payload. For example to change the identity of the claimed subject,
 
 ```
-jwt-tools patch -s mysecret -p `$.sub=1234567891, $.name=Fat Bastard` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJNciBCaWdnbGVzd29ydGgiLCJpYXQiOjE1NDQ4ODk3MzYsImV4cCI6MTU0NDg5NjkzNn0.l0YJqpInkK70lrSmy1KXtdXL2g4uHZS_vK-D4PnrrlA
+jwt-tools patch -s verysecret -p `$.sub=1234567891, $.name=Fat Bastard` eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJNciBCaWdnbGVzd29ydGgiLCJpYXQiOjE1NDQ4ODk3MzYsImV4cCI6MTU0NDg5NjkzNn0.l0YJqpInkK70lrSmy1KXtdXL2g4uHZS_vK-D4PnrrlA
+```
+
+### Refresh
+
+Use `refresh` to simply refresh a token with an issued-at (`iat`) and expiration (`exp`) claim. For example,
+
+```
+jwt-tools refresh -s verysecret eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJNciBCaWdnbGVzd29ydGgiLCJpYXQiOjE1NDQ4ODk3MzYsImV4cCI6MTU0NDg5NjkzNn0.l0YJqpInkK70lrSmy1KXtdXL2g4uHZS_vK-D4PnrrlA
 ```
