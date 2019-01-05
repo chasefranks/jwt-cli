@@ -83,7 +83,7 @@ const inspect = (obj) => {
 
     // convert exp to date so it can be rendered by our
     // custom util inspect function
-    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES) {
+    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES /* TODO: release */) {
         let time = obj.payload.exp * 1000;
         obj.payload.exp = new Date(time);
     }

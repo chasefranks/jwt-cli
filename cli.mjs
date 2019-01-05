@@ -32,7 +32,7 @@ program
     .option('-s, --secret <secret>', 'secret to sign with (uses default algorithm HS256)')
     .action((payload, cmd) => { sign(payload, cmd.secret); })
 
-////////////////////////////////////////TO BE RELEASED
+/* TODO: release */
 if (process.env.ENABLE_DEV_FEATURES) {
 program
     .command('patch <jwt>')
@@ -47,6 +47,5 @@ program
     .option('-s, --secret <secret>', 'secret to sign with (uses default algorithm HS256)')
     .action((jwt, cmd) => { refresh(jwt, cmd.secret) });
 }
-////////////////////////////////////////
 
 program.parse(process.argv);
