@@ -56,7 +56,27 @@ export const patch = ( token, path, secret ) => {
 }
 
 export const refresh = (token, secret) => {
-    console.log(`refreshing token ${token} with secret ${secret}`);
+
+    let decoded = jwt.decode(token, { complete:true });
+
+    let { header, payload } = decoded;
+
+    let now = new Date();
+
+    // get lifetime of token in seconds if available (if exp is present)
+    if (payload.exp) {
+        let lifetime = payload.exp - payload.iat;
+
+        payload.iat = Math.floor(now.getTime() / 1000);
+        payload.exp = payload.iat + lifetime;
+    } else {
+        payload.iat = Math.floor(now.getTime() / 1000);
+    }
+
+    // sign and return
+    let refreshedToken = jwt.sign(payload, secret, { header });
+    process.stdout.write(refreshedToken + '\n');
+
 }
 
 const inspect = (obj) => {
