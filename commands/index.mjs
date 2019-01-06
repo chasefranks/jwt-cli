@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
 import jp from 'jsonpath';
-import util from 'util';
+import colors from 'colors';
 
-import '../expiredDates';
+import { isExpired } from '../date';
 
 export const parse = (token) => {
     let decoded = jwt.decode(token, { complete: true });
-    process.stdout.write(inspect(decoded));
+    process.stdout.write(json(decoded));
 }
 
 export const verify = ( token, secret ) => {
     try {
         let verified = jwt.verify(token, secret);
-        process.stdout.write(inspect(verified))
+        process.stdout.write(json(verified))
     } catch(error) {
         process.stdout.write(`token not valid!\n${error.message}\n`);
     }
@@ -22,7 +22,7 @@ export const sign = ( payload, secret ) => {
     // parse and cleanse the input
     let payloadObj = JSON.parse(payload);
     let signedToken = jwt.sign(payloadObj, secret, { header: { typ: 'JWT' } });
-    process.stdout.write(signedToken + '\n');
+    printToken(signedToken);
 }
 
 export const patch = ( token, path, secret ) => {
@@ -50,8 +50,7 @@ export const patch = ( token, path, secret ) => {
 
     // sign with secret
     let signedToken = jwt.sign(payload, secret, { header: { typ: 'JWT' } });
-
-    process.stdout.write(signedToken + '\n');
+    printToken(signedToken);
 
 }
 
@@ -75,22 +74,31 @@ export const refresh = (token, secret) => {
 
     // sign and return
     let refreshedToken = jwt.sign(payload, secret, { header });
-    process.stdout.write(refreshedToken + '\n');
+    printToken(refreshedToken);
 
 }
 
-const inspect = (obj) => {
+const printToken = (token) => {
+    process.stdout.write(token + '\n')
+}
 
-    // convert exp to date so it can be rendered by our
-    // custom util inspect function
-    if (obj.payload && obj.payload.exp && process.env.ENABLE_DEV_FEATURES /* TODO: release */) {
-        let time = obj.payload.exp * 1000;
-        obj.payload.exp = new Date(time);
-    }
+const json = (obj) => {
+    let objToJson = JSON.stringify(obj, null, 4) + '\n';
+    return color(objToJson);
+}
 
-    return util.inspect(obj, {
-        compact: false,
-        colors: true
-    }) + '\n';
-
+const color = (jsonString) => {
+    return jsonString.split('\n')
+        .map(line => line.cyan)
+        .map(line => {
+            // check if line is an expiration date
+            if (line.includes('"exp":')) {
+                let keyValue = line.split(':');
+                if (isExpired(parseInt(keyValue[1])))
+                    keyValue[1] = keyValue[1].red;
+                return keyValue.join(':');
+            } else {
+                return line;
+            }
+        }).join('\n');
 }
