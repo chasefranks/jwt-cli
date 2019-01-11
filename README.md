@@ -144,3 +144,23 @@ Running verify again now returns the payload
 ```
 
 and we can see the timestamps have been updated (at time of this writing) with expiration set to the same 2 hour lifetime from the original token.
+
+## Development
+
+To symlink `jwt-tools` to a local git clone of this project, just run
+
+```
+npm link
+```
+
+from the project directory. The command `jwt-tools` should be on your `PATH` now
+
+```
+which jwt-tools
+```
+
+Any changes you make for development will now be reflected when you invoke the `jwt-tools` command from a terminal.
+
+## Issues
+
+Feel free to raise any issues on GitHub.

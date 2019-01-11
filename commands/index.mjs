@@ -83,13 +83,17 @@ const printToken = (token) => {
 }
 
 const json = (obj) => {
-    let objToJson = JSON.stringify(obj, null, 4) + '\n';
-    return color(objToJson);
+    return JSON.stringify(obj, null, 4) + '\n';
 }
 
+/**
+ * Can be used to color json string to highlight or warn. For example,
+ * this example highlights expired dates.
+ *
+ * TODO we want to make this feature togglable so colors can be disabled.
+ */
 const color = (jsonString) => {
     return jsonString.split('\n')
-        .map(line => line.cyan)
         .map(line => {
             // check if line is an expiration date
             if (line.includes('"exp":')) {
