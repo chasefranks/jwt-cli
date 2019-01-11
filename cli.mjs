@@ -12,7 +12,7 @@ import {
 } from './commands';
 
 program
-    .version('0.0.1', '-v, --version')
+    .version('1.0.1', '-v, --version')
     .description('A simple command-line tool for JSON web tokens')
 
 program
@@ -32,8 +32,6 @@ program
     .option('-s, --secret <secret>', 'secret to sign with (uses default algorithm HS256)')
     .action((payload, cmd) => { sign(payload, cmd.secret); })
 
-/* TODO: release */
-if (process.env.ENABLE_DEV_FEATURES) {
 program
     .command('patch <jwt>')
     .description('prints out a new jwt updating the contents of the payload based on the options, and refreshing the signature with a secret')
@@ -46,6 +44,5 @@ program
     .description('refreshes the token by setting iat to now and setting exp based on the token\'s previous lifetime')
     .option('-s, --secret <secret>', 'secret to sign with (uses default algorithm HS256)')
     .action((jwt, cmd) => { refresh(jwt, cmd.secret) });
-}
 
 program.parse(process.argv);
