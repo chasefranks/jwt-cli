@@ -147,7 +147,13 @@ and we can see the timestamps have been updated (at time of this writing) with e
 
 ## Development
 
-To symlink `jwt-tools` to a local git clone of this project, just run
+To set up a local development environment from a clone of this project, run a build with
+
+```
+npm build
+```
+
+then symlink to the local bin script with
 
 ```
 npm link
@@ -158,6 +164,8 @@ from the project directory. The command `jwt-tools` should be on your `PATH` now
 ```
 which jwt-tools
 ```
+
+and should ultimately resolve to `./lib/cli.js`.
 
 Any changes you make for development will now be reflected when you invoke the `jwt-tools` command from a terminal.
 
